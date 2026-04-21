@@ -777,3 +777,580 @@ footer {
   .btn-group { flex-direction: column; align-items: center; }
   .profile-photo { width: 120px; height: 120px; }
 }
+
+/* ================================================================
+   EMPLOYMENT BADGE
+   ================================================================ */
+.employment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 50px;
+  background: rgba(0,212,255,0.09);
+  border: 1px solid rgba(0,212,255,0.38);
+  color: var(--accent-teal-light);
+  font-size: 0.83rem;
+  font-weight: 600;
+  margin-bottom: 1.4rem;
+  animation: badge-pulse 2.8s ease-in-out infinite;
+}
+
+.employment-badge .badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+  animation: dot-pulse 2.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.18); }
+  50%       { box-shadow: 0 0 0 5px rgba(0,212,255,0.06); }
+}
+
+@keyframes dot-pulse {
+  0%, 100% { box-shadow: 0 0 4px var(--accent-cyan); }
+  50%       { box-shadow: 0 0 12px var(--accent-cyan), 0 0 20px rgba(0,212,255,0.5); }
+}
+
+/* ================================================================
+   CURRENTLY WORKING ON CARD
+   ================================================================ */
+.current-work-wrap {
+  padding: 1.5rem 2rem 2.5rem;
+  background: linear-gradient(135deg, rgba(8,18,34,0.94) 0%, rgba(10,24,48,0.92) 100%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.current-work-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.current-work-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(0,212,255,0.28);
+  border-radius: var(--radius);
+  padding: 1.6rem 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 32px rgba(0,212,255,0.09), inset 0 0 32px rgba(0,212,255,0.03);
+  animation: card-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes card-glow-pulse {
+  0%, 100% { box-shadow: 0 0 32px rgba(0,212,255,0.09), inset 0 0 32px rgba(0,212,255,0.03); }
+  50%       { box-shadow: 0 0 48px rgba(0,212,255,0.16), inset 0 0 48px rgba(0,212,255,0.06); }
+}
+
+.current-work-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-teal), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+.cw-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cw-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+}
+
+.cw-desc {
+  color: var(--text-secondary);
+  font-size: 0.93rem;
+  line-height: 1.78;
+  margin-bottom: 1rem;
+}
+
+.cw-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: var(--transition);
+}
+
+.cw-link:hover { gap: 0.7rem; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+.cw-link svg { width: 14px; height: 14px; }
+
+/* ================================================================
+   PRESS STRIP / FEATURED IN
+   ================================================================ */
+.press-strip {
+  padding: 0.9rem 2rem;
+  background: rgba(0,212,255,0.04);
+  border-top: 1px solid rgba(0,212,255,0.12);
+  border-bottom: 1px solid rgba(0,212,255,0.12);
+  text-align: center;
+}
+
+.press-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.press-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.press-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.32rem 0.9rem;
+  border-radius: 50px;
+  background: rgba(0,212,255,0.07);
+  border: 1px solid rgba(0,212,255,0.22);
+  color: var(--accent-teal-light);
+  font-size: 0.83rem;
+  font-weight: 500;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.press-item:hover {
+  background: rgba(0,212,255,0.14);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,212,255,0.2);
+}
+
+/* ================================================================
+   GROUPED SKILLS
+   ================================================================ */
+.skills-section-wrap { max-width: 900px; margin: 0 auto; }
+
+.skills-group { margin-bottom: 2.5rem; }
+
+.skills-group-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skills-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--glass-border);
+  display: block;
+}
+
+.sgl-technical { color: var(--accent-cyan); }
+.sgl-environmental { color: var(--accent-green); }
+.sgl-professional { color: #a78bfa; }
+
+.skill-badge-tech {
+  background: rgba(0,212,255,0.07);
+  border: 1px solid rgba(0,212,255,0.22);
+  color: var(--accent-teal-light);
+}
+
+.skill-badge-tech:hover {
+  background: rgba(0,212,255,0.16);
+  border-color: var(--accent-cyan);
+}
+
+.skill-badge-env {
+  background: rgba(16,185,129,0.07);
+  border: 1px solid rgba(16,185,129,0.22);
+  color: #6ee7b7;
+}
+
+.skill-badge-env:hover {
+  background: rgba(16,185,129,0.16);
+  border-color: var(--accent-green);
+}
+
+.skill-badge-pro {
+  background: rgba(139,92,246,0.07);
+  border: 1px solid rgba(139,92,246,0.22);
+  color: #c4b5fd;
+}
+
+.skill-badge-pro:hover {
+  background: rgba(139,92,246,0.16);
+  border-color: #8b5cf6;
+}
+
+/* ================================================================
+   LEADERSHIP CALLOUT
+   ================================================================ */
+.leadership-callout {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  background: rgba(16,185,129,0.06);
+  border: 1px solid rgba(16,185,129,0.28);
+  border-radius: var(--radius);
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+
+.lc-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 0.1rem;
+}
+
+.lc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  margin-bottom: 0.4rem;
+}
+
+.lc-text {
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.78;
+}
+
+/* ================================================================
+   EDUCATION TIMELINE CARDS
+   ================================================================ */
+.edu-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1.6rem 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.edu-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-teal));
+}
+
+.edu-card:hover {
+  border-color: var(--glass-border-glow);
+  transform: translateX(4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 20px rgba(0,212,255,0.08);
+}
+
+.edu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  color: var(--accent-cyan);
+  margin-bottom: 0.8rem;
+}
+
+.edu-degree {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-teal-light);
+  margin-bottom: 0.25rem;
+}
+
+.edu-school {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.edu-year {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 0.6rem;
+}
+
+.edu-concentrations {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.edu-concentrations strong { color: var(--text-primary); }
+
+/* ================================================================
+   RESUME CARDS (featured docx vs secondary pdf)
+   ================================================================ */
+.resume-primary-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(0,212,255,0.35);
+  border-radius: var(--radius);
+  padding: 2.4rem 2.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,212,255,0.1);
+}
+
+.resume-primary-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+}
+
+.resume-secondary-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.resume-card-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+}
+
+.badge-primary { background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.38); color: var(--accent-cyan); }
+.badge-secondary { background: rgba(100,116,139,0.12); border: 1px solid rgba(100,116,139,0.3); color: var(--text-muted); }
+.badge-credential { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.28); color: var(--accent-green); }
+
+.resume-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.resume-card-note {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 1.3rem;
+  line-height: 1.7;
+}
+
+/* ================================================================
+   RESEARCH FEATURES (research.html)
+   ================================================================ */
+.research-feature {
+  padding: 4rem 2rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.research-feature:last-child { border-bottom: none; }
+
+.research-feature-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.rf-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rf-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.rf-subtitle {
+  color: var(--accent-teal-light);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.rf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.rf-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rf-tag-prep     { background: rgba(0,212,255,0.1);   border: 1px solid rgba(0,212,255,0.3);   color: var(--accent-cyan); }
+.rf-tag-collab   { background: rgba(139,92,246,0.1);  border: 1px solid rgba(139,92,246,0.3);  color: #c4b5fd; }
+.rf-tag-field    { background: rgba(16,185,129,0.1);  border: 1px solid rgba(16,185,129,0.3);  color: var(--accent-green); }
+.rf-tag-press    { background: rgba(251,191,36,0.1);  border: 1px solid rgba(251,191,36,0.3);  color: #fcd34d; }
+.rf-tag-capstone { background: rgba(239,68,68,0.1);   border: 1px solid rgba(239,68,68,0.3);   color: #f87171; }
+.rf-tag-undergrad{ background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.3);  color: #a78bfa; }
+
+.citation-block {
+  background: rgba(0,212,255,0.04);
+  border-left: 3px solid rgba(0,212,255,0.5);
+  padding: 1.2rem 1.5rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 1.5rem;
+}
+
+.citation-block p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.citation-block strong { color: var(--text-primary); font-style: normal; }
+
+.rf-collaborators {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 1.2rem;
+}
+
+.rf-collaborators svg { flex-shrink: 0; }
+
+.rf-body {
+  color: var(--text-secondary);
+  font-size: 0.97rem;
+  line-height: 1.85;
+}
+
+.rf-body p { margin-bottom: 1.1rem; }
+.rf-body p:last-child { margin-bottom: 0; }
+
+.rf-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+}
+
+.rf-feature-image {
+  width: 100%;
+  max-width: 700px;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  margin: 0 auto 2rem;
+  display: block;
+  object-fit: cover;
+  max-height: 380px;
+}
+
+.research-hero-section {
+  background: linear-gradient(135deg, rgba(8,18,34,0.95) 0%, rgba(5,13,26,0.98) 100%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Current work indicator in research */
+.current-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  padding: 0.3rem 0.85rem;
+  border-radius: 50px;
+  border: 1px solid rgba(0,212,255,0.4);
+  background: rgba(0,212,255,0.07);
+  margin-bottom: 1rem;
+  animation: badge-pulse 2.8s ease-in-out infinite;
+}
+
+.current-indicator .indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  animation: dot-pulse 2.8s ease-in-out infinite;
+}
+
+/* Card image header */
+.card-image-header {
+  width: calc(100% + 4rem);
+  margin: -2rem -2rem 1.5rem;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  display: block;
+}
+

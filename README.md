@@ -1,8 +1,8 @@
-# Katerina Bischel — Personal Portfolio
+# Katerina Bischel — Portfolio Website
 
-Personal portfolio website for Katerina Bischel, Environmental Scientist & Water Resources Specialist.
+Live: **https://katerinabischel.github.io/my_site/index.html**
 
-**Live URL:** https://katerinabischel.github.io/my_site
+Personal portfolio site for Katerina Bischel, Environmental Scientist at Applied Marine Sciences. M.E.S.M. 2026, UC Santa Barbara Bren School. Water Resources · Pollution Remediation · Data Science.
 
 ## Pages
 
@@ -28,36 +28,30 @@ Pure HTML / CSS / JavaScript — no frameworks, no build step. Deploys directly 
 - Typewriter animation on home headline
 - Fully responsive with hamburger mobile menu
 - Google Fonts: Space Grotesk + Outfit
+- Animated employment badge (pulsing glow)
+- Grouped skills grid (Technical / Environmental / Professional)
+- Research feature sections with citation block
 
 ## Assets
 
 All assets live in the repository root alongside HTML files:
 - `panorama_1.jpeg` – `panorama_9.jpeg` — background panoramas
 - `profile_photo.PNG` — circular hero photo
-- `Katerina_Bischel_ Resume.pdf` — primary resume
-- `Bischel_resume_AMS_format_2pp.docx` — AMS format resume
-- `diploma.pdf` — academic credential
-- `River Remedy Final Report.pdf` — project report
-- `whitewater_river_watershed_management_plan.pdf` — watershed plan
-- `senior_thesis.pdf` — undergraduate research
-- `biodegradation_writing_sample.pdf` — technical writing
-
-## Manual Steps Before Launch
-
-1. **Education** — fill in `[Field]`, `[University]`, `[Year]` placeholders in `about.html`
-2. **Email** — replace `[your.email@domain.com]` in `contact.html` with real address
-3. **Master's thesis** — add `masters_thesis.pdf` to the folder and update `research.html`
+- `bee_model.png` — YOLOv8 pollinator detection model output
+- `Bischel_resume_AMS_format_2pp.docx` — primary AMS format resume (featured)
+- `Katerina_Bischel_ Resume.pdf` — general format resume
+- `diploma.pdf` — UCSB academic credential
+- `River Remedy Final Report.pdf` — graduate capstone report
+- `whitewater_river_watershed_management_plan.pdf` — watershed management plan
+- `senior_thesis.pdf` — undergraduate thesis
+- `biodegradation_writing_sample.pdf` — technical writing sample
 
 ## Deployment
 
 ```bash
-cd ~/Desktop/my_website
-git init
-git remote add origin https://github.com/katerinabischel/my_site.git
 git add .
-git commit -m "Initial portfolio site — Katerina Bischel"
-git branch -M main
-git push -u origin main
+git commit -m "Major content expansion — Pilcomayo paper, Applied Marine Sciences, education, bee model, resume swap"
+git push origin main
 ```
 
-Then in GitHub → repo Settings → Pages → Source: **main branch, / (root)**.
+GitHub Pages serves from the `main` branch root.
