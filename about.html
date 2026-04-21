@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Katerina Bischel</title>
+  <meta name="description" content="Learn about Katerina Bischel — her background in environmental science, water resources, and data science." />
+  <meta property="og:title"       content="About | Katerina Bischel" />
+  <meta property="og:description" content="Environmental Scientist & Water Resources Specialist" />
+  <meta property="og:image"       content="panorama_4.jpeg" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .about-photo-col { text-align: center; }
+    .about-photo {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent-cyan);
+      box-shadow: 0 0 0 6px rgba(0,212,255,0.12), 0 0 40px rgba(0,212,255,0.35);
+      margin: 0 auto 1.5rem;
+    }
+    .about-name {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-teal-light);
+      margin-bottom: 0.3rem;
+    }
+    .about-role { color: var(--text-secondary); font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">KB</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-bg" style="background-image: url('panorama_1.jpeg');"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="page-hero-title">About Me</h1>
+    <p class="page-hero-subtitle">Scientist · Analyst · Field Researcher</p>
+  </div>
+</section>
+
+<!-- BIO + PHOTO -->
+<section class="section">
+  <div class="about-grid">
+    <div class="about-photo-col reveal">
+      <img src="profile_photo.PNG" alt="Katerina Bischel" class="about-photo" />
+      <p class="about-name">Katerina Bischel</p>
+      <p class="about-role">Environmental Scientist | Water Resources Specialist</p>
+    </div>
+
+    <div class="reveal reveal-d1">
+      <h2 style="margin-bottom:1rem; color: var(--accent-teal-light);">Who I Am</h2>
+      <p class="bio-text" style="text-align:left; margin:0 0 1.5rem;">
+        I am an environmental scientist and data analyst with a passion for water resources,
+        watershed management, pollution remediation, and environmental data science. My work
+        sits at the intersection of fieldwork, research, and technology — from analyzing
+        California water quality to designing watershed management plans and developing
+        pollution remediation strategies.
+      </p>
+      <p style="color: var(--text-secondary); line-height: 1.85; font-size: 1rem;">
+        Whether collecting samples in the field, building interactive data dashboards in R, or
+        writing technical reports, I bring scientific rigor and genuine curiosity to every
+        project. I believe that clear communication of environmental data is as critical as
+        the science itself.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- PANORAMA DIVIDER 8 -->
+<div class="pano-divider" style="background-image: url('panorama_8.jpeg');">
+  <div class="pano-divider-content reveal">
+    <p class="pano-divider-quote">Bridging <span>fieldwork</span> and <span>data science</span> to protect our water systems</p>
+  </div>
+</div>
+
+<!-- EDUCATION -->
+<section class="section-bg">
+  <div class="section-inner">
+    <h2 class="section-title reveal">Education</h2>
+    <div class="timeline reveal reveal-d1">
+      <div class="timeline-item">
+        <p class="timeline-degree">Master of Science — [Field]</p>
+        <p class="timeline-school">[University]</p>
+        <p class="timeline-year">[Year]</p>
+      </div>
+      <div class="timeline-item">
+        <p class="timeline-degree">Bachelor of Science — [Field]</p>
+        <p class="timeline-school">[University]</p>
+        <p class="timeline-year">[Year]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="section">
+  <h2 class="section-title reveal">Skills & Expertise</h2>
+  <div class="skills-grid reveal reveal-d1">
+    <span class="skill-badge">💧 Water Quality Analysis</span>
+    <span class="skill-badge">🏔️ Watershed Management</span>
+    <span class="skill-badge">🗺️ GIS & Spatial Analysis</span>
+    <span class="skill-badge">📊 R / Shiny Apps</span>
+    <span class="skill-badge">🌿 Environmental Data Science</span>
+    <span class="skill-badge">🧪 Pollution Remediation</span>
+    <span class="skill-badge">📝 Technical Writing</span>
+    <span class="skill-badge">🔭 Field Research</span>
+    <span class="skill-badge">🦠 Biodegradation Science</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <p class="footer-copy">© 2025 Katerina Bischel | Environmental Scientist</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/katerina-bischel/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://github.com/katerinabischel" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script src="main.js"></script>
+</body>
+</html>
