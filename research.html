@@ -10,8 +10,215 @@
   <meta property="og:image"       content="panorama_4.jpeg" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .research-bg {
+    /* ── Centered page container ── */
+    .research-main {
+      padding: 80px 0 80px;
       background: var(--bg-base);
+    }
+
+    .research-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── Glass card — identical for all 4 cards ── */
+    .research-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 48px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .research-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 200, 200, 0.15);
+    }
+
+    /* Image at top of bee card */
+    .card-top-image {
+      width: calc(100% + 80px);
+      margin: -40px -40px 32px;
+      display: block;
+      max-height: 280px;
+      object-fit: cover;
+      border-radius: 16px 16px 0 0;
+    }
+
+    /* ── Badge pills ── */
+    .rc-badge {
+      display: inline-block;
+      background: rgba(0, 200, 200, 0.15);
+      border: 1px solid rgba(0, 200, 200, 0.4);
+      color: #00e5e5;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      margin-right: 8px;
+      margin-bottom: 12px;
+    }
+
+    .rc-badge-collab {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: rgba(139, 92, 246, 0.4);
+      color: #c4b5fd;
+    }
+
+    .rc-badge-field {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+
+    .rc-badge-capstone {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.35);
+      color: #f87171;
+    }
+
+    .rc-badge-undergrad {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.35);
+      color: #a78bfa;
+    }
+
+    .rc-badge-press {
+      background: rgba(251, 191, 36, 0.12);
+      border-color: rgba(251, 191, 36, 0.35);
+      color: #fcd34d;
+      text-decoration: none;
+    }
+
+    /* Live indicator */
+    .rc-live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 14px;
+    }
+
+    .rc-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+      animation: dot-pulse 2.8s ease-in-out infinite;
+    }
+
+    /* ── Card heading ── */
+    .rc-title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent-teal-light);
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+
+    .rc-subtitle {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.97rem;
+      font-style: italic;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* ── Citation block ── */
+    .rc-citation {
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 3px solid rgba(0, 212, 255, 0.5);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 18px;
+    }
+
+    .rc-citation p {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.92rem;
+      line-height: 1.75;
+      font-style: italic;
+    }
+
+    .rc-citation strong {
+      color: rgba(255, 255, 255, 0.95);
+      font-style: normal;
+    }
+
+    /* ── Collaborator line ── */
+    .rc-collab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.87rem;
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    /* ── Body text ── */
+    .rc-body {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    .rc-body p { margin-bottom: 1rem; }
+    .rc-body p:last-child { margin-bottom: 0; }
+
+    /* ── CTA button row ── */
+    .rc-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    /* PDF embed inside card */
+    .rc-pdf-wrap {
+      margin-top: 24px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .rc-pdf-wrap iframe {
+      width: 100%;
+      height: 560px;
+      border: none;
+      display: block;
+      background: #111;
+    }
+
+    .rc-pdf-fallback {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .rc-pdf-fallback a {
+      color: var(--accent-cyan);
+    }
+
+    @media (max-width: 600px) {
+      .research-container { padding: 0 18px; }
+      .research-card { padding: 24px 20px; }
+      .card-top-image { width: calc(100% + 40px); margin: -24px -20px 24px; }
+      .rc-title { font-size: 1.3rem; }
     }
   </style>
 </head>
@@ -46,219 +253,192 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     FEATURE 1 — PILCOMAYO RIVER (Current Work, Most Prominent)
-     ══════════════════════════════════════════════════════════ -->
-<div class="research-feature research-hero-section">
-  <div class="research-feature-inner">
+<!-- RESEARCH CARDS -->
+<section class="research-main">
+  <div class="research-container">
+    <h2 class="section-title reveal">Academic Research</h2>
 
-    <div class="current-indicator">
-      <span class="indicator-dot"></span>
-      Currently In Progress
-    </div>
+    <!-- ══ CARD 1 — PILCOMAYO RIVER (Current Work) ══ -->
+    <div class="research-card reveal">
+      <div class="rc-live-indicator">
+        <span class="rc-live-dot"></span>
+        Currently In Progress
+      </div>
 
-    <div class="rf-label">
-      📄 Manuscript in Preparation
-    </div>
+      <div style="margin-bottom: 14px;">
+        <span class="rc-badge">📄 Manuscript in Preparation · 2026</span>
+        <span class="rc-badge rc-badge-collab">With Dr. Arturo Keller, UCSB</span>
+      </div>
 
-    <h2 class="rf-title">Heavy Metal Contamination in the Pilcomayo River Basin</h2>
-    <p class="rf-subtitle">
-      Spatiotemporal Dynamics, Sediment-Water Partitioning, and Geochemically Targeted Remediation Strategies
-    </p>
-
-    <div class="rf-tags">
-      <span class="rf-tag rf-tag-prep">Manuscript in Preparation · 2026</span>
-      <span class="rf-tag rf-tag-collab">With Dr. Arturo Keller, UCSB</span>
-    </div>
-
-    <div class="citation-block">
-      <p>
-        <strong>Bischel, K., and Keller, A. (in preparation).</strong>
-        Heavy metal contamination in the Pilcomayo River Basin: Spatiotemporal dynamics,
-        sediment-water partitioning, and geochemically targeted remediation strategies.
-        <em>[Journal TBD].</em>
+      <h2 class="rc-title">Heavy Metal Contamination in the Pilcomayo River Basin</h2>
+      <p class="rc-subtitle">
+        Spatiotemporal Dynamics, Sediment-Water Partitioning, and Geochemically Targeted Remediation Strategies
       </p>
+
+      <div class="rc-citation">
+        <p>
+          <strong>Bischel, K., and Keller, A. (in preparation).</strong>
+          Heavy metal contamination in the Pilcomayo River Basin: Spatiotemporal dynamics,
+          sediment-water partitioning, and geochemically targeted remediation strategies.
+          <em>[Journal TBD].</em>
+        </p>
+      </div>
+
+      <div class="rc-collab">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Collaborator: Dr. Arturo Keller, Bren School of Environmental Science &amp; Management, UC Santa Barbara
+      </div>
+
+      <div class="rc-body">
+        <p>
+          This manuscript investigates heavy metal contamination dynamics in the Pilcomayo River Basin,
+          examining how metals partition between sediment and water across space and time. The research
+          develops geochemically targeted remediation strategies grounded in field data and environmental
+          chemistry — directly advancing practical approaches to river pollution remediation.
+        </p>
+        <p>
+          The Pilcomayo River flows through Bolivia, Argentina, and Paraguay, serving as a critical
+          water source for indigenous communities and agricultural regions while facing severe contamination
+          from upstream mining activity. Quantifying spatiotemporal dynamics and sediment-water partitioning
+          behavior is foundational to designing effective, site-specific remediation interventions.
+        </p>
+      </div>
     </div>
 
-    <div class="rf-collaborators">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Collaborator: Dr. Arturo Keller, Bren School of Environmental Science &amp; Management, UC Santa Barbara
-    </div>
+    <!-- ══ CARD 2 — POLLINATOR AI ══ -->
+    <div class="research-card reveal">
+      <img src="bee_model.png"
+           alt="YOLOv8 pollinator detection model output showing bees on flowering plants"
+           class="card-top-image" />
 
-    <div class="rf-body">
-      <p>
-        This manuscript investigates heavy metal contamination dynamics in the Pilcomayo River Basin,
-        examining how metals partition between sediment and water across space and time. The research
-        develops geochemically targeted remediation strategies grounded in field data and environmental
-        chemistry — directly advancing practical approaches to river pollution remediation.
-      </p>
-      <p>
-        The Pilcomayo River flows through Bolivia, Argentina, and Paraguay, serving as a critical
-        water source for indigenous communities and agricultural regions while facing severe contamination
-        from upstream mining activity. Quantifying spatiotemporal dynamics and sediment-water partitioning
-        behavior is foundational to designing effective, site-specific remediation interventions.
-      </p>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════
-     FEATURE 2 — BEE POLLINATOR AI
-     ══════════════════════════════════════════════════════════ -->
-<div class="research-feature">
-  <div class="research-feature-inner">
-
-    <!-- Bee model image -->
-    <img src="bee_model.png" alt="YOLOv8 pollinator detection model output showing bees on flowering plants" class="rf-feature-image reveal" />
-
-    <div class="rf-label reveal">
-      🤖 Machine Learning · Field Research
-    </div>
-
-    <h2 class="rf-title reveal">Automated Pollinator Monitoring Using YOLOv8 Computer Vision</h2>
-
-    <div class="rf-tags reveal reveal-d1">
-      <span class="rf-tag rf-tag-field">Field Research · Machine Learning · 2025</span>
-      <span class="rf-tag rf-tag-press">
+      <div style="margin-bottom: 14px;">
+        <span class="rc-badge rc-badge-field">Field Research · Machine Learning · 2025</span>
         <a href="https://us15.campaign-archive.com/?e=__test_email__&u=05cf4db23a15975cb832e2846&id=3d0ad0cae9"
-           target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+           target="_blank" rel="noopener noreferrer" class="rc-badge rc-badge-press" style="text-decoration:none;">
           📰 Featured In Press
         </a>
-      </span>
+      </div>
+
+      <h2 class="rc-title">Automated Pollinator Monitoring Using YOLOv8 Computer Vision</h2>
+
+      <div class="rc-collab">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        UC Santa Barbara · Cheadle Center for Biodiversity &amp; Ecological Restoration · Dr. Katja Seltmann &amp; Dr. Chris Evelyn
+      </div>
+
+      <div class="rc-body">
+        <p>
+          Developed and trained YOLOv8 object detection models to automate pollinator monitoring for two
+          federally endangered coastal plant species: <em>Ventura marsh milk-vetch</em>
+          (<em>Astragalus pycnostachyus</em> var. <em>lanosissimus</em>) and <em>salt marsh bird's-beak</em>
+          (<em>Chloropyron maritimum</em> ssp. <em>maritimum</em>) at the North Campus Open Space (NCOS)
+          restoration site in Goleta, CA.
+        </p>
+        <p>
+          Collected and processed 200+ hours of field camera footage over a 9-week season (June–September
+          2025) across four monitoring sites. Using Panasonic Lumix cameras positioned within yarn-delineated
+          quadrants, footage was captured during three daily shifts three days per week, with site visit order
+          randomized each shift. Environmental conditions were logged alongside each recording session.
+        </p>
+        <p>
+          Integrated trained models with the HyDaT tracking framework to identify and quantify pollinator
+          visitation events, including entry timing, duration, and exit. Mentored two undergraduate research
+          trainees throughout the season in field protocols, camera operation, and data quality assessment.
+        </p>
+      </div>
+
+      <div class="rc-links">
+        <a href="https://us15.campaign-archive.com/?e=__test_email__&u=05cf4db23a15975cb832e2846&id=3d0ad0cae9"
+           target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          📰 Read Feature Article
+        </a>
+        <a href="projects.html" class="btn btn-ghost">
+          View Project
+        </a>
+      </div>
     </div>
 
-    <div class="rf-collaborators reveal reveal-d1">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      UC Santa Barbara · Cheadle Center for Biodiversity &amp; Ecological Restoration · Dr. Katja Seltmann &amp; Dr. Chris Evelyn
+    <!-- ══ CARD 3 — RIVER REMEDY CAPSTONE ══ -->
+    <div class="research-card reveal">
+      <div style="margin-bottom: 14px;">
+        <span class="rc-badge rc-badge-capstone">🌊 Master's Capstone · Bren School 2026</span>
+      </div>
+
+      <h2 class="rc-title">River Remedy — Graduate Capstone Report</h2>
+
+      <div class="rc-body">
+        <p>
+          A comprehensive graduate-level environmental assessment examining river health, pollution sources,
+          contaminant transport pathways, and evidence-based remediation strategies. Developed as a
+          master's-level capstone deliverable at the UC Santa Barbara Bren School, this report synthesizes
+          field data, environmental chemistry, and policy analysis into actionable long-term restoration
+          recommendations.
+        </p>
+      </div>
+
+      <div class="rc-links">
+        <a href="River Remedy Final Report.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Full Report
+        </a>
+        <a href="River Remedy Final Report.pdf" download class="btn btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </a>
+      </div>
+
+      <div class="rc-pdf-wrap">
+        <iframe src="River Remedy Final Report.pdf"
+                title="River Remedy Final Report"
+                aria-label="River Remedy capstone report PDF viewer">
+        </iframe>
+      </div>
+      <p class="rc-pdf-fallback">
+        If the preview doesn't load, <a href="River Remedy Final Report.pdf" download>click to download</a>.
+      </p>
     </div>
 
-    <div class="rf-body reveal reveal-d2">
-      <p>
-        Developed and trained YOLOv8 object detection models to automate pollinator monitoring for two
-        federally endangered coastal plant species: <em>Ventura marsh milk-vetch</em>
-        (<em>Astragalus pycnostachyus</em> var. <em>lanosissimus</em>) and <em>salt marsh bird's-beak</em>
-        (<em>Chloropyron maritimum</em> ssp. <em>maritimum</em>) at the North Campus Open Space (NCOS)
-        restoration site in Goleta, CA.
-      </p>
-      <p>
-        Collected and processed 200+ hours of field camera footage over a 9-week season (June–September
-        2025) across four monitoring sites. Using Panasonic Lumix cameras positioned within yarn-delineated
-        quadrants, footage was captured during three daily shifts three days per week, with site visit order
-        randomized each shift. Environmental conditions were logged alongside each recording session.
-      </p>
-      <p>
-        Integrated trained models with the HyDaT tracking framework to identify and quantify pollinator
-        visitation events, including entry timing, duration, and exit. Mentored two undergraduate research
-        trainees throughout the season in field protocols, camera operation, and data quality assessment.
-      </p>
-    </div>
+    <!-- ══ CARD 4 — SENIOR THESIS ══ -->
+    <div class="research-card reveal">
+      <div style="margin-bottom: 14px;">
+        <span class="rc-badge rc-badge-undergrad">🎓 Undergraduate · Senior Thesis · UCSB</span>
+      </div>
 
-    <div class="rf-links reveal">
-      <a href="https://us15.campaign-archive.com/?e=__test_email__&u=05cf4db23a15975cb832e2846&id=3d0ad0cae9"
-         target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-        📰 Read Feature Article
-      </a>
-      <a href="projects.html" class="btn btn-ghost">
-        View Project
-      </a>
+      <h2 class="rc-title">Senior Undergraduate Thesis</h2>
+
+      <div class="rc-body">
+        <p>
+          Original undergraduate research in environmental studies at UCSB, representing the
+          culmination of a B.A. with concentration in Water Quality &amp; Systems. This thesis reflects
+          the investigative depth and scientific communication skills developed throughout undergraduate
+          study at UC Santa Barbara.
+        </p>
+      </div>
+
+      <div class="rc-links">
+        <a href="senior_thesis.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Thesis
+        </a>
+        <a href="senior_thesis.pdf" download class="btn btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Thesis
+        </a>
+      </div>
+
+      <div class="rc-pdf-wrap">
+        <iframe src="senior_thesis.pdf"
+                title="Senior Thesis PDF"
+                aria-label="Senior thesis PDF viewer">
+        </iframe>
+      </div>
+      <p class="rc-pdf-fallback">
+        If the preview doesn't load, <a href="senior_thesis.pdf" download>click to download</a>.
+      </p>
     </div>
 
   </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════
-     FEATURE 3 — RIVER REMEDY GRADUATE CAPSTONE
-     ══════════════════════════════════════════════════════════ -->
-<div class="research-feature" style="background: var(--bg-secondary);">
-  <div class="research-feature-inner">
-
-    <div class="rf-label reveal">
-      🌊 Graduate Capstone
-    </div>
-
-    <h2 class="rf-title reveal">River Remedy — Graduate Capstone Report</h2>
-
-    <div class="rf-tags reveal reveal-d1">
-      <span class="rf-tag rf-tag-capstone">Master's Capstone · Bren School 2026</span>
-    </div>
-
-    <div class="rf-body reveal reveal-d2">
-      <p>
-        A comprehensive graduate-level environmental assessment examining river health, pollution sources,
-        contaminant transport pathways, and evidence-based remediation strategies. Developed as a
-        master's-level capstone deliverable at the UC Santa Barbara Bren School, this report synthesizes
-        field data, environmental chemistry, and policy analysis into actionable long-term restoration
-        recommendations.
-      </p>
-    </div>
-
-    <div class="rf-links reveal">
-      <a href="River Remedy Final Report.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        View Full Report
-      </a>
-    </div>
-
-    <!-- PDF Preview -->
-    <div class="pdf-wrapper reveal reveal-d3" style="margin-top: 2rem;">
-      <iframe
-        src="River Remedy Final Report.pdf"
-        title="River Remedy Final Report"
-        aria-label="River Remedy capstone report PDF viewer">
-      </iframe>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════
-     FEATURE 4 — SENIOR THESIS
-     ══════════════════════════════════════════════════════════ -->
-<div class="research-feature">
-  <div class="research-feature-inner">
-
-    <div class="rf-label reveal">
-      🎓 Undergraduate Research
-    </div>
-
-    <h2 class="rf-title reveal">Senior Undergraduate Thesis</h2>
-
-    <div class="rf-tags reveal reveal-d1">
-      <span class="rf-tag rf-tag-undergrad">Undergraduate · Senior Thesis · UCSB</span>
-    </div>
-
-    <div class="rf-body reveal reveal-d2">
-      <p>
-        Original undergraduate research in environmental studies at UCSB, representing the
-        culmination of a B.A. with concentration in Water Quality &amp; Systems. This thesis reflects
-        the investigative depth and scientific communication skills developed throughout undergraduate
-        study at UC Santa Barbara.
-      </p>
-    </div>
-
-    <div class="rf-links reveal">
-      <a href="senior_thesis.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        View Thesis
-      </a>
-      <a href="senior_thesis.pdf" download class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Thesis
-      </a>
-    </div>
-
-    <!-- Thesis Preview -->
-    <div class="pdf-wrapper reveal reveal-d3" style="margin-top: 2rem;">
-      <iframe
-        src="senior_thesis.pdf"
-        title="Senior Thesis PDF"
-        aria-label="Senior thesis PDF viewer">
-      </iframe>
-    </div>
-
-  </div>
-</div>
+</section>
 
 <!-- FOOTER -->
 <footer>
