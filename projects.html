@@ -49,6 +49,24 @@
       gap: 0.5rem;
       margin-top: auto;
     }
+    .card-image-header {
+      width: 100%;
+      aspect-ratio: 16 / 9; /* Keeps all images the same "wide" shape */
+      object-fit: cover;    /* Crops the image to fill the space perfectly */
+      border-radius: 12px;  /* Matches the card's rounded aesthetic */
+      border: 1px solid rgba(255, 255, 255, 0.15); /* Subtle border */
+      margin-bottom: 1.25rem;
+      display: block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adds a little depth */
+    }
+
+    /* Centers the emojis for cards without images */
+    .card-icon {
+      display: block;
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -166,7 +184,7 @@
       <span class="project-tag tag-watershed">Environmental Science</span>
       <h3 class="card-title">🎓Undergraduate Senior Thesis</h3>
       <p class="card-desc">
-        A study conducted at Reef tanks at UC Santa Barbara exploring the use of calcium carbonate from discarded bivalve shells to enhance ocean alkalinity. This project partnered with a local seafood restraunt to assess benefits of recycling discarded bivalve shells. 
+        A study conducted at Reef tanks at UC Santa Barbara exploring the use of calcium carbonate from discarded bivalve shells to enhance ocean alkalinity. This project partnered with a local seafood restaurant to assess benefits of recycling discarded bivalve shells. 
       </p>
       <a href="senior_thesis.pdf" target="_blank" rel="noopener noreferrer" class="card-link">
         Read Thesis
