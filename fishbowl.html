@@ -214,17 +214,12 @@ scene.add(ray1, ray2, ray3);
 // FISH CONFIG
 // Tweak these if fish are too big/small or face the wrong way
 // ─────────────────────────────────────────────────────────────────
-const FISH_SCALE        = 0.10;   // shrink/grow all fish — adjust if needed
-const FISH_FACE_OFFSET  = Math.PI; // 0 = faces forward, Math.PI = flip 180° if backwards
+const FISH_SCALE       = 0.07;  // 30% smaller than before
+const FISH_FACE_OFFSET = 0;     // 0 = forward, Math.PI = flip if backwards
 
-// Each fish gets its own orbit: radius, height, speed, start angle
+// Single fish — near the tank floor, slow wandering path
 const FISH_ORBITS = [
-    { radius: 0.58, baseY: -0.12, speed: 0.55, startAngle: 0.0  },
-    { radius: 0.72, baseY: -0.28, speed: 0.42, startAngle: 1.05 },
-    { radius: 0.44, baseY:  0.05, speed: 0.70, startAngle: 2.10 },
-    { radius: 0.65, baseY: -0.38, speed: 0.48, startAngle: 3.14 },
-    { radius: 0.38, baseY:  0.12, speed: 0.78, startAngle: 4.20 },
-    { radius: 0.60, baseY: -0.20, speed: 0.52, startAngle: 5.25 },
+    { radius: 0.52, baseY: -0.92, speed: 0.22, startAngle: 0.0 },
 ];
 
 // Live fish objects — populated after the GLB loads
@@ -308,6 +303,7 @@ loader.load(
 
                     fishInstances.push({
                         group,
+                        root,   // keep ref so we can wiggle the body
                         mixer,
                         orbit: { ...orbit, angle: orbit.startAngle },
                     });
@@ -359,27 +355,34 @@ function animate() {
     ray2.rotation.y = Math.sin(t * 0.22 + 0.9) * 0.05;
     ray3.rotation.y = Math.sin(t * 0.34 + 1.8) * 0.07;
 
-    // ── Fish: advance along circular orbit + face direction of travel ──
-    fishInstances.forEach(({ group, mixer, orbit }) => {
+    // ── Fish: wander near the tank floor + procedural body wiggle ──
+    fishInstances.forEach(({ group, root, mixer, orbit }) => {
         orbit.angle += orbit.speed * delta;
+        const a = orbit.angle;
 
-        // Current position
-        const x = Math.cos(orbit.angle) * orbit.radius;
-        const z = Math.sin(orbit.angle) * orbit.radius;
-        // Gentle vertical bob — different frequency per fish keeps them independent
-        const y = orbit.baseY + Math.sin(orbit.angle * 2.1 + orbit.startAngle) * 0.07;
+        // Wandering figure-8 style path — two overlapping sine waves so it
+        // never feels like a perfect circle
+        const x = Math.cos(a)        * orbit.radius
+                + Math.cos(a * 0.7 + 1.0) * 0.20;
+        const z = Math.sin(a * 1.1)  * orbit.radius
+                + Math.sin(a * 0.5)  * 0.18;
+        // Gentle floor-hugging vertical drift
+        const y = orbit.baseY + Math.sin(a * 1.6) * 0.10;
         group.position.set(x, y, z);
 
-        // Look at the next point on the orbit so the fish faces where it's going
-        const ahead = orbit.angle + 0.15;
+        // Point the group toward where it will be a moment later
+        const ahead = a + 0.12;
         _nextPos.set(
-            Math.cos(ahead) * orbit.radius,
+            Math.cos(ahead)        * orbit.radius + Math.cos(ahead * 0.7 + 1.0) * 0.20,
             y,
-            Math.sin(ahead) * orbit.radius
+            Math.sin(ahead * 1.1)  * orbit.radius + Math.sin(ahead * 0.5) * 0.18
         );
         group.lookAt(_nextPos);
 
-        // Tick the skeletal animation
+        // Procedural body undulation — sine wave on the fish mesh's Y rotation
+        // This gives the tail-wag even when the baked animation is subtle
+        root.rotation.y = FISH_FACE_OFFSET + Math.sin(t * 3.8) * 0.28;
+
         mixer.update(delta);
     });
 
