@@ -96,6 +96,7 @@
 import * as THREE from 'three';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { SkeletonUtils } from 'three/addons/utils/SkeletonUtils.js';
 
 // ─────────────────────────────────────────────────────────────────
 // RENDERER
@@ -211,7 +212,28 @@ const ray3 = makeRay(0x78e0f0, 0.55, -0.55, 3.0, 0.22, 0.028);
 scene.add(ray1, ray2, ray3);
 
 // ─────────────────────────────────────────────────────────────────
-// LOAD GLB
+// FISH CONFIG
+// Tweak these if fish are too big/small or face the wrong way
+// ─────────────────────────────────────────────────────────────────
+const FISH_SCALE        = 0.10;   // shrink/grow all fish — adjust if needed
+const FISH_FACE_OFFSET  = Math.PI; // 0 = faces forward, Math.PI = flip 180° if backwards
+
+// Each fish gets its own orbit: radius, height, speed, start angle
+const FISH_ORBITS = [
+    { radius: 0.58, baseY: -0.12, speed: 0.55, startAngle: 0.0  },
+    { radius: 0.72, baseY: -0.28, speed: 0.42, startAngle: 1.05 },
+    { radius: 0.44, baseY:  0.05, speed: 0.70, startAngle: 2.10 },
+    { radius: 0.65, baseY: -0.38, speed: 0.48, startAngle: 3.14 },
+    { radius: 0.38, baseY:  0.12, speed: 0.78, startAngle: 4.20 },
+    { radius: 0.60, baseY: -0.20, speed: 0.52, startAngle: 5.25 },
+];
+
+// Live fish objects — populated after the GLB loads
+const fishInstances = [];   // { group, mixer, orbit }
+const mixers        = [];
+
+// ─────────────────────────────────────────────────────────────────
+// LOAD GLB — scene first, then fish
 // ─────────────────────────────────────────────────────────────────
 const progressEl = document.getElementById('progress');
 const loadingEl  = document.getElementById('loading');
@@ -220,7 +242,7 @@ const subEl      = document.getElementById('loader-sub');
 const loader = new GLTFLoader();
 
 loader.load(
-    'fishbowl.glb',           // ← put fishbowl.glb in the same folder as this file
+    'fishbowl.glb',
     (gltf) => {
         scene.add(gltf.scene);
 
@@ -229,33 +251,78 @@ loader.load(
             if (!obj.isMesh) return;
             const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
             mats.forEach(m => {
-                // Keep transparent objects from z-fighting
                 if (m.transparent) m.depthWrite = false;
-                // Boost emission — Cycles bakes at scene-linear, web needs a lift
                 if (m.emissive) {
                     const e = m.emissiveIntensity ?? 1.0;
                     m.emissiveIntensity = Math.min(e * 2.8, 4.0);
                 }
-                // Ensure double-sided for seaweed blades
                 if (obj.name.toLowerCase().includes('seaweed')) {
                     m.side = THREE.DoubleSide;
                 }
             });
         });
 
-        // Fade loading screen
-        progressEl.style.width = '100%';
-        setTimeout(() => {
-            loadingEl.classList.add('fade-out');
-            setTimeout(() => { loadingEl.style.display = 'none'; }, 950);
-        }, 300);
+        // Scene loaded — now load the fish
+        subEl.textContent = 'Loading fish…';
+        loader.load(
+            'shiny_fish.glb',
+            (fishGltf) => {
+                // Spawn one clone per orbit entry
+                FISH_ORBITS.forEach((orbit, i) => {
+                    // SkeletonUtils.clone preserves bones + skinning properly
+                    const clone = SkeletonUtils.clone(fishGltf.scene);
+                    clone.scale.setScalar(FISH_SCALE);
 
-        // Auto-hide the hint after 6 s
-        setTimeout(() => document.getElementById('hint').classList.add('gone'), 6000);
+                    // Correct facing direction — wrap in a group so lookAt
+                    // drives the group while the inner mesh stays oriented
+                    clone.rotation.y = FISH_FACE_OFFSET;
+
+                    const group = new THREE.Group();
+                    group.add(clone);
+                    scene.add(group);
+
+                    // Wire up animation — play all clips (swim cycle)
+                    const mixer = new THREE.AnimationMixer(clone);
+                    if (fishGltf.animations.length > 0) {
+                        fishGltf.animations.forEach(clip => {
+                            const action = mixer.clipAction(clip);
+                            // Stagger start times so fish don't all flap in sync
+                            action.time = i * 0.4;
+                            action.play();
+                        });
+                    }
+                    mixers.push(mixer);
+
+                    fishInstances.push({
+                        group,
+                        mixer,
+                        orbit: { ...orbit, angle: orbit.startAngle },
+                    });
+                });
+
+                // Both loads done — fade loading screen
+                progressEl.style.width = '100%';
+                setTimeout(() => {
+                    loadingEl.classList.add('fade-out');
+                    setTimeout(() => { loadingEl.style.display = 'none'; }, 950);
+                }, 300);
+                setTimeout(() => document.getElementById('hint').classList.add('gone'), 6000);
+            },
+            null,
+            (err) => {
+                console.warn('shiny_fish.glb not found, skipping fish:', err);
+                // Still show the scene even if fish fail to load
+                progressEl.style.width = '100%';
+                setTimeout(() => {
+                    loadingEl.classList.add('fade-out');
+                    setTimeout(() => { loadingEl.style.display = 'none'; }, 950);
+                }, 300);
+            }
+        );
     },
     (xhr) => {
         if (xhr.total) {
-            progressEl.style.width = ((xhr.loaded / xhr.total) * 100) + '%';
+            progressEl.style.width = ((xhr.loaded / xhr.total) * 90) + '%'; // save last 10% for fish
         }
     },
     (err) => {
@@ -270,19 +337,47 @@ loader.load(
 // ─────────────────────────────────────────────────────────────────
 const clock = new THREE.Clock();
 
+// Reusable vectors — avoids garbage collection in the loop
+const _nextPos = new THREE.Vector3();
+
 function animate() {
     requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
+    const delta = clock.getDelta();
+    const t     = clock.elapsedTime;
 
-    // Pulse coral + floor lights — gives a living, breathing feel
-    coralO.intensity    = 2.2 + Math.sin(t * 1.30) * 0.45;
-    coralP.intensity    = 2.0 + Math.sin(t * 0.90 + 1.1) * 0.40;
+    // ── Lights pulse ──
+    coralO.intensity     = 2.2 + Math.sin(t * 1.30) * 0.45;
+    coralP.intensity     = 2.0 + Math.sin(t * 0.90 + 1.1) * 0.40;
     floorLight.intensity = 5.0 + Math.sin(t * 0.55) * 0.35;
 
-    // Slowly drift god rays — mimics the caustic ripple on a real water surface
+    // ── God ray drift ──
     ray1.rotation.y = Math.sin(t * 0.28) * 0.06;
     ray2.rotation.y = Math.sin(t * 0.22 + 0.9) * 0.05;
     ray3.rotation.y = Math.sin(t * 0.34 + 1.8) * 0.07;
+
+    // ── Fish: advance along circular orbit + face direction of travel ──
+    fishInstances.forEach(({ group, mixer, orbit }) => {
+        orbit.angle += orbit.speed * delta;
+
+        // Current position
+        const x = Math.cos(orbit.angle) * orbit.radius;
+        const z = Math.sin(orbit.angle) * orbit.radius;
+        // Gentle vertical bob — different frequency per fish keeps them independent
+        const y = orbit.baseY + Math.sin(orbit.angle * 2.1 + orbit.startAngle) * 0.07;
+        group.position.set(x, y, z);
+
+        // Look at the next point on the orbit so the fish faces where it's going
+        const ahead = orbit.angle + 0.15;
+        _nextPos.set(
+            Math.cos(ahead) * orbit.radius,
+            y,
+            Math.sin(ahead) * orbit.radius
+        );
+        group.lookAt(_nextPos);
+
+        // Tick the skeletal animation
+        mixer.update(delta);
+    });
 
     controls.update();
     renderer.render(scene, camera);
