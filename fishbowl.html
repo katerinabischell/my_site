@@ -239,7 +239,7 @@ const CREATURES = [
     },
     {
         file: 'jelly_fish_spongebob.glb',
-        scale: 0.40,  faceOffset: 0,  rollFix: 0,
+        scale: 2.0,   faceOffset: 0,  rollFix: 0,
         behavior: 'jellyfish',
         params: { baseY: 0.10, bobAmp: 0.42, bobFreq: 0.55, driftRadius: 0.38, driftFreqX: 0.19, driftFreqZ: 0.14, pulseFreq: 2.2 },
     },
@@ -306,6 +306,21 @@ loader.load(
                     root.scale.setScalar(c.scale);
                     root.rotation.y = c.faceOffset;
                     root.rotation.z = c.rollFix;
+
+                    // Force all materials visible — some Sketchfab models have
+                    // opacity=0 or fully transparent defaults that make them invisible
+                    root.traverse(obj => {
+                        if (!obj.isMesh) return;
+                        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+                        mats.forEach(m => {
+                            if (m.opacity < 0.15) m.opacity = 0.85;
+                            m.transparent  = m.opacity < 1.0;
+                            m.depthWrite   = !m.transparent;
+                            m.side         = THREE.DoubleSide;
+                            m.alphaTest    = 0;
+                            m.needsUpdate  = true;
+                        });
+                    });
 
                     const group = new THREE.Group();
                     group.add(root);
