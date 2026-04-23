@@ -227,19 +227,19 @@ const CREATURES = [
     },
     {
         file: 'fish___betta_splendens.glb',
-        scale: 0.055, faceOffset: 0,  rollFix: 0,
+        scale: 0.45,  faceOffset: 0,  rollFix: 0,
         behavior: 'fish',
         params: { radius: 0.60, baseY: -0.55, speed: 0.17, startAngle: 2.1,  wiggleFreq: 4.2, wiggleAmp: 0.30 },
     },
     {
         file: 'koi_fish.glb',
-        scale: 0.065, faceOffset: 0,  rollFix: 0,
+        scale: 0.0065, faceOffset: 0, rollFix: 0,
         behavior: 'fish',
         params: { radius: 0.42, baseY: -0.35, speed: 0.13, startAngle: 4.5,  wiggleFreq: 3.2, wiggleAmp: 0.25 },
     },
     {
         file: 'jelly_fish_spongebob.glb',
-        scale: 0.13,  faceOffset: 0,  rollFix: 0,
+        scale: 0.40,  faceOffset: 0,  rollFix: 0,
         behavior: 'jellyfish',
         params: { baseY: 0.10, bobAmp: 0.42, bobFreq: 0.55, driftRadius: 0.38, driftFreqX: 0.19, driftFreqZ: 0.14, pulseFreq: 2.2 },
     },
@@ -322,7 +322,7 @@ loader.load(
                     mixers.push(mixer);
 
                     // Store state needed by the animate loop
-                    const state = { group, root, mixer, behavior: c.behavior, params: { ...c.params, scale: c.scale }, faceOffset: c.faceOffset };
+                    const state = { group, root, mixer, behavior: c.behavior, params: { ...c.params, scale: c.scale }, faceOffset: c.faceOffset, rollFix: c.rollFix };
                     // Fish and crab need a mutable angle / phase tracker
                     if (c.behavior === 'fish')  state.angle = c.params.startAngle;
                     if (c.behavior === 'crab')  state.phase = Math.random() * Math.PI * 2;
@@ -380,7 +380,7 @@ function animate() {
 
     // ── Creatures ──
     creatureInstances.forEach(inst => {
-        const { group, root, mixer, behavior, params, faceOffset } = inst;
+        const { group, root, mixer, behavior, params, faceOffset, rollFix } = inst;
 
         if (behavior === 'fish') {
             inst.angle += params.speed * delta;
@@ -393,8 +393,8 @@ function animate() {
 
             // Body undulation — tail wag relative to travel direction
             root.rotation.y = faceOffset + Math.sin(t * params.wiggleFreq) * params.wiggleAmp;
-            // Preserve the roll fix through the wiggle
-            root.rotation.z = inst.params.rollFix ?? 0; // re-apply since lookAt may reset
+            // Re-apply roll correction every frame (lookAt on group can affect child euler)
+            root.rotation.z = rollFix ?? 0;
         }
 
         if (behavior === 'jellyfish') {
