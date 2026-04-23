@@ -96,7 +96,6 @@
 import * as THREE from 'three';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { SkeletonUtils } from 'three/addons/utils/SkeletonUtils.js';
 
 // ─────────────────────────────────────────────────────────────────
 // RENDERER
@@ -278,32 +277,30 @@ loader.load(
             });
         });
 
-        // Scene loaded — now load the fish
+        // Scene loaded — now load each fish independently
+        // (browser caches the GLB so it only downloads once)
         subEl.textContent = 'Loading fish…';
-        loader.load(
-            'shiny_fish.glb',
-            (fishGltf) => {
-                // Spawn one clone per orbit entry
-                FISH_ORBITS.forEach((orbit, i) => {
-                    // SkeletonUtils.clone preserves bones + skinning properly
-                    const clone = SkeletonUtils.clone(fishGltf.scene);
-                    clone.scale.setScalar(FISH_SCALE);
+        let fishLoaded = 0;
 
-                    // Correct facing direction — wrap in a group so lookAt
-                    // drives the group while the inner mesh stays oriented
-                    clone.rotation.y = FISH_FACE_OFFSET;
+        FISH_ORBITS.forEach((orbit, i) => {
+            const fishLoader = new GLTFLoader();
+            fishLoader.load(
+                'shiny_fish.glb',
+                (fishGltf) => {
+                    const root = fishGltf.scene;
+                    root.scale.setScalar(FISH_SCALE);
+                    root.rotation.y = FISH_FACE_OFFSET;
 
                     const group = new THREE.Group();
-                    group.add(clone);
+                    group.add(root);
                     scene.add(group);
 
-                    // Wire up animation — play all clips (swim cycle)
-                    const mixer = new THREE.AnimationMixer(clone);
+                    // Play swim animation if the model has one
+                    const mixer = new THREE.AnimationMixer(root);
                     if (fishGltf.animations.length > 0) {
                         fishGltf.animations.forEach(clip => {
                             const action = mixer.clipAction(clip);
-                            // Stagger start times so fish don't all flap in sync
-                            action.time = i * 0.4;
+                            action.time = i * 0.4; // stagger so they don't flap in sync
                             action.play();
                         });
                     }
@@ -314,17 +311,18 @@ loader.load(
                         mixer,
                         orbit: { ...orbit, angle: orbit.startAngle },
                     });
-                });
 
-                // Both loads done — fade loading screen
-                fadeOut();
-            },
-            null,
-            (err) => {
-                console.warn('shiny_fish.glb skipped:', err);
-                fadeOut(); // scene shows even without fish
-            }
-        );
+                    fishLoaded++;
+                    if (fishLoaded === FISH_ORBITS.length) fadeOut();
+                },
+                null,
+                (err) => {
+                    console.warn('shiny_fish.glb skipped:', err);
+                    fishLoaded++;
+                    if (fishLoaded === FISH_ORBITS.length) fadeOut();
+                }
+            );
+        });
     },
     (xhr) => {
         if (xhr.total) {
