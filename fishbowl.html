@@ -211,29 +211,57 @@ const ray3 = makeRay(0x78e0f0, 0.55, -0.55, 3.0, 0.22, 0.028);
 scene.add(ray1, ray2, ray3);
 
 // ─────────────────────────────────────────────────────────────────
-// FISH CONFIG
-// Tweak these if fish are too big/small or face the wrong way
+// CREATURE DEFINITIONS
+// scale      — overall size (adjust if too big/small)
+// faceOffset — Y rotation fix: 0 = forward, Math.PI = flip 180°
+// rollFix    — Z rotation fix for sideways tilt (radians)
+// behavior   — 'fish' | 'jellyfish' | 'crab'
+// params     — behavior-specific motion settings
 // ─────────────────────────────────────────────────────────────────
-const FISH_SCALE       = 0.07;  // 30% smaller than before
-const FISH_FACE_OFFSET = 0;     // 0 = forward, Math.PI = flip if backwards
-
-// Single fish — near the tank floor, slow wandering path
-const FISH_ORBITS = [
-    { radius: 0.52, baseY: -0.92, speed: 0.22, startAngle: 0.0 },
+const CREATURES = [
+    {
+        file: 'shiny_fish.glb',
+        scale: 0.07,  faceOffset: 0,  rollFix: -0.22,
+        behavior: 'fish',
+        params: { radius: 0.52, baseY: -0.92, speed: 0.22, startAngle: 0.0,  wiggleFreq: 3.8, wiggleAmp: 0.28 },
+    },
+    {
+        file: 'fish___betta_splendens.glb',
+        scale: 0.055, faceOffset: 0,  rollFix: 0,
+        behavior: 'fish',
+        params: { radius: 0.60, baseY: -0.55, speed: 0.17, startAngle: 2.1,  wiggleFreq: 4.2, wiggleAmp: 0.30 },
+    },
+    {
+        file: 'koi_fish.glb',
+        scale: 0.065, faceOffset: 0,  rollFix: 0,
+        behavior: 'fish',
+        params: { radius: 0.42, baseY: -0.35, speed: 0.13, startAngle: 4.5,  wiggleFreq: 3.2, wiggleAmp: 0.25 },
+    },
+    {
+        file: 'jelly_fish_spongebob.glb',
+        scale: 0.13,  faceOffset: 0,  rollFix: 0,
+        behavior: 'jellyfish',
+        params: { baseY: 0.10, bobAmp: 0.42, bobFreq: 0.55, driftRadius: 0.38, driftFreqX: 0.19, driftFreqZ: 0.14, pulseFreq: 2.2 },
+    },
+    {
+        file: 'little_hermit_crab.glb',
+        scale: 0.07,  faceOffset: 0,  rollFix: 0,
+        behavior: 'crab',
+        params: { floorY: -1.22, z: -0.28, xRange: 0.70, speed: 0.18 },
+    },
 ];
 
-// Live fish objects — populated after the GLB loads
-const fishInstances = [];   // { group, mixer, orbit }
-const mixers        = [];
+// Live creature instances — populated after each GLB loads
+const creatureInstances = [];
+const mixers            = [];
 
 // ─────────────────────────────────────────────────────────────────
-// LOAD GLB — scene first, then fish
+// LOAD GLB — scene first, then all creatures
 // ─────────────────────────────────────────────────────────────────
 const progressEl = document.getElementById('progress');
 const loadingEl  = document.getElementById('loading');
 const subEl      = document.getElementById('loader-sub');
 
-// Fade out loading screen — called on success or error
 let fadedOut = false;
 function fadeOut() {
     if (fadedOut) return;
@@ -245,9 +273,7 @@ function fadeOut() {
     }, 300);
     setTimeout(() => document.getElementById('hint').classList.add('gone'), 6000);
 }
-
-// Hard failsafe — if nothing loads within 20s, show whatever we have
-setTimeout(fadeOut, 20000);
+setTimeout(fadeOut, 25000); // hard failsafe
 
 const loader = new GLTFLoader();
 
@@ -255,8 +281,6 @@ loader.load(
     'fishbowl.glb',
     (gltf) => {
         scene.add(gltf.scene);
-
-        // Post-process materials exported from Blender
         gltf.scene.traverse((obj) => {
             if (!obj.isMesh) return;
             const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
@@ -266,68 +290,60 @@ loader.load(
                     const e = m.emissiveIntensity ?? 1.0;
                     m.emissiveIntensity = Math.min(e * 2.8, 4.0);
                 }
-                if (obj.name.toLowerCase().includes('seaweed')) {
-                    m.side = THREE.DoubleSide;
-                }
+                if (obj.name.toLowerCase().includes('seaweed')) m.side = THREE.DoubleSide;
             });
         });
 
-        // Scene loaded — now load each fish independently
-        // (browser caches the GLB so it only downloads once)
-        subEl.textContent = 'Loading fish…';
-        let fishLoaded = 0;
+        subEl.textContent = 'Loading creatures…';
+        let doneCount = 0;
 
-        FISH_ORBITS.forEach((orbit, i) => {
-            const fishLoader = new GLTFLoader();
-            fishLoader.load(
-                'shiny_fish.glb',
-                (fishGltf) => {
-                    const root = fishGltf.scene;
-                    root.scale.setScalar(FISH_SCALE);
-                    root.rotation.y = FISH_FACE_OFFSET;
+        CREATURES.forEach((c, i) => {
+            const cLoader = new GLTFLoader();
+            cLoader.load(
+                c.file,
+                (gltf) => {
+                    const root = gltf.scene;
+                    root.scale.setScalar(c.scale);
+                    root.rotation.y = c.faceOffset;
+                    root.rotation.z = c.rollFix;
 
                     const group = new THREE.Group();
                     group.add(root);
                     scene.add(group);
 
-                    // Play swim animation if the model has one
                     const mixer = new THREE.AnimationMixer(root);
-                    if (fishGltf.animations.length > 0) {
-                        fishGltf.animations.forEach(clip => {
+                    if (gltf.animations.length > 0) {
+                        gltf.animations.forEach(clip => {
                             const action = mixer.clipAction(clip);
-                            action.time = i * 0.4; // stagger so they don't flap in sync
+                            action.time = i * 0.5;
                             action.play();
                         });
                     }
                     mixers.push(mixer);
 
-                    fishInstances.push({
-                        group,
-                        root,   // keep ref so we can wiggle the body
-                        mixer,
-                        orbit: { ...orbit, angle: orbit.startAngle },
-                    });
+                    // Store state needed by the animate loop
+                    const state = { group, root, mixer, behavior: c.behavior, params: { ...c.params, scale: c.scale }, faceOffset: c.faceOffset };
+                    // Fish and crab need a mutable angle / phase tracker
+                    if (c.behavior === 'fish')  state.angle = c.params.startAngle;
+                    if (c.behavior === 'crab')  state.phase = Math.random() * Math.PI * 2;
+                    creatureInstances.push(state);
 
-                    fishLoaded++;
-                    if (fishLoaded === FISH_ORBITS.length) fadeOut();
+                    doneCount++;
+                    if (doneCount === CREATURES.length) fadeOut();
                 },
                 null,
                 (err) => {
-                    console.warn('shiny_fish.glb skipped:', err);
-                    fishLoaded++;
-                    if (fishLoaded === FISH_ORBITS.length) fadeOut();
+                    console.warn(`${c.file} skipped:`, err);
+                    doneCount++;
+                    if (doneCount === CREATURES.length) fadeOut();
                 }
             );
         });
     },
-    (xhr) => {
-        if (xhr.total) {
-            progressEl.style.width = ((xhr.loaded / xhr.total) * 90) + '%'; // save last 10% for fish
-        }
-    },
+    (xhr) => { if (xhr.total) progressEl.style.width = ((xhr.loaded / xhr.total) * 85) + '%'; },
     (err) => {
-        console.error('fishbowl.glb load error:', err);
-        subEl.textContent = 'Could not load fishbowl.glb — make sure you\'re using a local server (python3 -m http.server 8000).';
+        console.error('fishbowl.glb error:', err);
+        subEl.textContent = 'Run: python3 -m http.server 8000  then open localhost:8000/fishbowl.html';
         subEl.style.color = '#ff8080';
     }
 );
@@ -335,10 +351,17 @@ loader.load(
 // ─────────────────────────────────────────────────────────────────
 // ANIMATION LOOP
 // ─────────────────────────────────────────────────────────────────
-const clock = new THREE.Clock();
+const clock   = new THREE.Clock();
+const _lookAt = new THREE.Vector3();
 
-// Reusable vectors — avoids garbage collection in the loop
-const _nextPos = new THREE.Vector3();
+function fishPath(a, p) {
+    // Two overlapping sine waves → natural wandering figure-8
+    return {
+        x: Math.cos(a)       * p.radius + Math.cos(a * 0.7 + 1.0) * 0.18,
+        z: Math.sin(a * 1.1) * p.radius + Math.sin(a * 0.5)       * 0.16,
+        y: p.baseY + Math.sin(a * 1.6) * 0.09,
+    };
+}
 
 function animate() {
     requestAnimationFrame(animate);
@@ -355,33 +378,57 @@ function animate() {
     ray2.rotation.y = Math.sin(t * 0.22 + 0.9) * 0.05;
     ray3.rotation.y = Math.sin(t * 0.34 + 1.8) * 0.07;
 
-    // ── Fish: wander near the tank floor + procedural body wiggle ──
-    fishInstances.forEach(({ group, root, mixer, orbit }) => {
-        orbit.angle += orbit.speed * delta;
-        const a = orbit.angle;
+    // ── Creatures ──
+    creatureInstances.forEach(inst => {
+        const { group, root, mixer, behavior, params, faceOffset } = inst;
 
-        // Wandering figure-8 style path — two overlapping sine waves so it
-        // never feels like a perfect circle
-        const x = Math.cos(a)        * orbit.radius
-                + Math.cos(a * 0.7 + 1.0) * 0.20;
-        const z = Math.sin(a * 1.1)  * orbit.radius
-                + Math.sin(a * 0.5)  * 0.18;
-        // Gentle floor-hugging vertical drift
-        const y = orbit.baseY + Math.sin(a * 1.6) * 0.10;
-        group.position.set(x, y, z);
+        if (behavior === 'fish') {
+            inst.angle += params.speed * delta;
+            const cur  = fishPath(inst.angle, params);
+            const next = fishPath(inst.angle + 0.12, params);
 
-        // Point the group toward where it will be a moment later
-        const ahead = a + 0.12;
-        _nextPos.set(
-            Math.cos(ahead)        * orbit.radius + Math.cos(ahead * 0.7 + 1.0) * 0.20,
-            y,
-            Math.sin(ahead * 1.1)  * orbit.radius + Math.sin(ahead * 0.5) * 0.18
-        );
-        group.lookAt(_nextPos);
+            group.position.set(cur.x, cur.y, cur.z);
+            _lookAt.set(next.x, cur.y, next.z);
+            group.lookAt(_lookAt);
 
-        // Procedural body undulation — sine wave on the fish mesh's Y rotation
-        // This gives the tail-wag even when the baked animation is subtle
-        root.rotation.y = FISH_FACE_OFFSET + Math.sin(t * 3.8) * 0.28;
+            // Body undulation — tail wag relative to travel direction
+            root.rotation.y = faceOffset + Math.sin(t * params.wiggleFreq) * params.wiggleAmp;
+            // Preserve the roll fix through the wiggle
+            root.rotation.z = inst.params.rollFix ?? 0; // re-apply since lookAt may reset
+        }
+
+        if (behavior === 'jellyfish') {
+            // Asymmetric vertical bob — rises quickly, sinks slowly (real jellyfish)
+            const raw  = Math.sin(t * params.bobFreq);
+            const bob  = raw > 0 ? Math.pow(raw, 0.5) : -Math.pow(-raw, 1.6);
+            const y    = params.baseY + bob * params.bobAmp;
+
+            // Lazy horizontal drift — Lissajous keeps it from repeating exactly
+            const x = Math.sin(t * params.driftFreqX + 0.5) * params.driftRadius;
+            const z = Math.cos(t * params.driftFreqZ)        * params.driftRadius * 0.75;
+            group.position.set(x, y, z);
+
+            // Tilt gently in the direction of horizontal drift
+            group.rotation.z = Math.sin(t * params.driftFreqX + 0.5) * 0.12;
+            group.rotation.x = Math.sin(t * params.driftFreqZ)        * 0.08;
+
+            // Bell pulse — scale the mesh slightly so it looks like it's contracting
+            const pulse = 1.0 + Math.sin(t * params.pulseFreq) * 0.10;
+            root.scale.setScalar((params.scale ?? 0.13) * pulse);
+        }
+
+        if (behavior === 'crab') {
+            inst.phase += params.speed * delta;
+            const cx = Math.sin(inst.phase) * params.xRange;
+            group.position.set(cx, params.floorY, params.z);
+
+            // Face the direction of movement — flip when reversing
+            const moving = Math.cos(inst.phase); // positive = moving right
+            group.rotation.y = faceOffset + (moving > 0 ? Math.PI * 0.5 : -Math.PI * 0.5);
+
+            // Slight sideways waddle
+            root.rotation.z = Math.sin(inst.phase * 4) * 0.08;
+        }
 
         mixer.update(delta);
     });
