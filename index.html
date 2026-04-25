@@ -36,12 +36,28 @@
       line-height: 1.85;
     }
 
-    /* ── Fishbowl portal orb ── */
-    .fishbowl-portal {
-      position: absolute;
-      bottom: 2.2rem;
-      right: 2.4rem;
-      z-index: 4;
+    /* ── 3D Scene orbs ── */
+    @keyframes bowl-bob {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-7px); }
+    }
+
+    .interactive-orbs-section {
+      padding: 4rem 2rem 5rem;
+      text-align: center;
+      background: var(--bg-secondary);
+    }
+
+    .orbs-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 3.5rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .portal-orb-wrap {
       text-decoration: none;
       display: flex;
       flex-direction: column;
@@ -50,28 +66,21 @@
       animation: bowl-bob 4s ease-in-out infinite;
     }
 
-    @keyframes bowl-bob {
-      0%, 100% { transform: translateY(0px); }
-      50%       { transform: translateY(-7px); }
+    .portal-orb-wrap:nth-child(2) {
+      animation-delay: 0.6s;
     }
 
-    .fishbowl-portal-orb {
+    .portal-orb {
       width: 64px;
       height: 64px;
       border-radius: 50%;
       overflow: hidden;
-      border: 1.5px solid rgba(0,212,255,0.45);
-      box-shadow:
-        0 0 0 4px rgba(0,212,255,0.08),
-        0 0 22px rgba(0,212,255,0.30),
-        0 0 50px rgba(0,212,255,0.12),
-        inset 0 0 18px rgba(0,212,255,0.10);
       transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
       background: rgba(5,13,26,0.6);
       backdrop-filter: blur(8px);
     }
 
-    .fishbowl-portal-orb img {
+    .portal-orb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -79,20 +88,31 @@
       transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
-    .fishbowl-portal-label {
+    .portal-orb-label {
       font-size: 0.62rem;
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(0,212,255,0.55);
       opacity: 0;
       transform: translateY(4px);
       transition: all 0.3s ease;
       white-space: nowrap;
-      text-shadow: 0 0 12px rgba(0,212,255,0.6);
     }
 
-    .fishbowl-portal:hover .fishbowl-portal-orb {
+    /* Teal — fishbowl */
+    .portal-orb--teal {
+      border: 1.5px solid rgba(0,212,255,0.45);
+      box-shadow:
+        0 0 0 4px rgba(0,212,255,0.08),
+        0 0 22px rgba(0,212,255,0.30),
+        0 0 50px rgba(0,212,255,0.12),
+        inset 0 0 18px rgba(0,212,255,0.10);
+    }
+    .portal-orb-wrap--teal .portal-orb-label {
+      color: rgba(0,212,255,0.65);
+      text-shadow: 0 0 12px rgba(0,212,255,0.6);
+    }
+    .portal-orb-wrap--teal:hover .portal-orb--teal {
       border-color: rgba(0,212,255,0.85);
       box-shadow:
         0 0 0 6px rgba(0,212,255,0.12),
@@ -102,19 +122,41 @@
       transform: scale(1.1);
     }
 
-    .fishbowl-portal:hover .fishbowl-portal-orb img {
+    /* Warm gold — donut */
+    .portal-orb--warm {
+      border: 1.5px solid rgba(255,185,55,0.50);
+      box-shadow:
+        0 0 0 4px rgba(255,185,55,0.08),
+        0 0 22px rgba(255,185,55,0.30),
+        0 0 50px rgba(255,185,55,0.12),
+        inset 0 0 18px rgba(255,185,55,0.10);
+    }
+    .portal-orb-wrap--warm .portal-orb-label {
+      color: rgba(255,185,55,0.75);
+      text-shadow: 0 0 12px rgba(255,185,55,0.6);
+    }
+    .portal-orb-wrap--warm:hover .portal-orb--warm {
+      border-color: rgba(255,185,55,0.90);
+      box-shadow:
+        0 0 0 6px rgba(255,185,55,0.12),
+        0 0 32px rgba(255,185,55,0.55),
+        0 0 70px rgba(255,185,55,0.22),
+        inset 0 0 24px rgba(255,185,55,0.18);
+      transform: scale(1.1);
+    }
+
+    .portal-orb-wrap:hover .portal-orb img {
       opacity: 1;
       transform: scale(1.06);
     }
-
-    .fishbowl-portal:hover .fishbowl-portal-label {
+    .portal-orb-wrap:hover .portal-orb-label {
       opacity: 1;
       transform: translateY(0);
     }
 
     @media (max-width: 480px) {
-      .fishbowl-portal { bottom: 1.2rem; right: 1.2rem; }
-      .fishbowl-portal-orb { width: 50px; height: 50px; }
+      .portal-orb { width: 50px; height: 50px; }
+      .orbs-row { gap: 2rem; }
     }
   </style>
 </head>
@@ -174,13 +216,6 @@
     </div>
   </div>
 
-  <!-- Fishbowl portal — subtle easter egg linking to the 3D scene -->
-  <a href="fishbowl.html" class="fishbowl-portal" aria-label="Explore 3D fishbowl scene">
-    <div class="fishbowl-portal-orb">
-      <img src="fishbowl_pic.png" alt="3D fishbowl" />
-    </div>
-    <span class="fishbowl-portal-label">explore →</span>
-  </a>
 
 </section>
 
@@ -280,6 +315,28 @@
       <h3 class="card-title">Writing</h3>
       <p class="card-desc">Technical scientific writing samples demonstrating rigorous environmental communication across hydrology, remediation, and marine science.</p>
       <span class="card-link">Read Samples <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+    </a>
+
+  </div>
+</section>
+
+<!-- 3D INTERACTIVE SCENES -->
+<section class="interactive-orbs-section">
+  <h2 class="section-title reveal">3D Interactive Scenes</h2>
+  <div class="orbs-row">
+
+    <a href="fishbowl.html" class="portal-orb-wrap portal-orb-wrap--teal" aria-label="Explore 3D fishbowl scene">
+      <div class="portal-orb portal-orb--teal">
+        <img src="fishbowl_pic.png" alt="3D fishbowl" />
+      </div>
+      <span class="portal-orb-label">Fishbowl →</span>
+    </a>
+
+    <a href="donut.html" class="portal-orb-wrap portal-orb-wrap--warm" aria-label="View 3D donut">
+      <div class="portal-orb portal-orb--warm">
+        <img src="donut.png" alt="3D donut" />
+      </div>
+      <span class="portal-orb-label">Donut →</span>
     </a>
 
   </div>
