@@ -3,73 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Donut 🍩</title>
+  <title>Donut — Katerina Bischel</title>
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: linear-gradient(160deg, #fdf3e3 0%, #fce8c0 50%, #f9d89a 100%);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      font-family: 'Georgia', serif;
+      padding: 2.5rem 1.5rem;
+
+      /* Pink pastel gradient — light at top, slightly deeper blush at bottom */
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(255,220,230,0.55) 0%, transparent 60%),
+        radial-gradient(ellipse at 75% 80%, rgba(255,195,215,0.40) 0%, transparent 55%),
+        linear-gradient(160deg, #fff0f4 0%, #fde3ed 40%, #f9d4e6 100%);
+
+      font-family: 'Cormorant Garamond', Georgia, serif;
     }
+
+    /* Subtle scattered sugar-dot texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,180,210,0.18) 1px, transparent 1px);
+      background-size: 28px 28px;
+      z-index: 0;
+    }
+
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    /* Back link */
+    .back-link {
+      align-self: flex-start;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem;
+      font-style: italic;
+      letter-spacing: 0.08em;
+      color: #c47a9a;
+      text-decoration: none;
+      margin-bottom: 0.8rem;
+      transition: color 0.2s ease;
+    }
+    .back-link:hover { color: #a0527a; }
 
     h1 {
-      font-size: 2rem;
-      color: #6b3a1f;
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.03em;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: #b05070;
+      letter-spacing: 0.02em;
+      text-align: center;
+      line-height: 1.2;
+
+      /* Soft text glow */
+      text-shadow:
+        0 2px 18px rgba(220,100,140,0.18),
+        0 1px 4px rgba(220,100,140,0.10);
     }
 
-    p.sub {
+    .sub {
+      font-family: 'Cormorant Garamond', serif;
       font-size: 0.95rem;
-      color: #a0622a;
-      margin-bottom: 1.8rem;
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: #cc90aa;
+      text-align: center;
+      margin-bottom: 1.4rem;
     }
 
     model-viewer {
-      width: min(700px, 95vw);
-      height: min(700px, 95vw);
+      width: min(680px, 95vw);
+      height: min(680px, 95vw);
       background: transparent;
       --poster-color: transparent;
-      border-radius: 20px;
-      box-shadow: 0 30px 80px rgba(100, 50, 0, 0.18);
+      border-radius: 24px;
+
+      /* Layered pink-glow shadow */
+      box-shadow:
+        0 0 0 1px rgba(220,140,170,0.15),
+        0 12px 40px rgba(200,100,140,0.14),
+        0 30px 80px rgba(200,100,140,0.10),
+        0 0 60px rgba(255,180,210,0.12);
     }
 
-    .hint {
-      margin-top: 1.2rem;
-      font-size: 0.80rem;
-      color: #b07840;
-      opacity: 0.85;
-    }
   </style>
 </head>
 <body>
 
-  <h1>Fresh Donut 🍩</h1>
-  <p class="sub">Drag to rotate &nbsp;·&nbsp; Scroll to zoom</p>
+  <div class="page-wrap">
 
-  <model-viewer
-    src="donut.glb"
-    alt="A detailed 3D donut with white glaze frosting and colourful sprinkles"
-    auto-rotate
-    auto-rotate-delay="1000"
-    rotation-per-second="20deg"
-    camera-controls
-    shadow-intensity="1.2"
-    shadow-softness="0.8"
-    exposure="1.1"
-    environment-image="neutral"
-    tone-mapping="commerce"
-  ></model-viewer>
+    <a href="index.html" class="back-link">← back to portfolio</a>
 
-  <p class="hint">Made in Blender 5.1.1 &nbsp;·&nbsp; Exported as .glb &nbsp;·&nbsp;
-    <a href="https://katerinabischell.github.io/my_site" style="color:#a0622a;">katerinabischell.github.io/my_site</a>
-  </p>
+    <h1>Donut</h1>
+    <p class="sub">drag to rotate &nbsp;&middot;&nbsp; scroll to zoom</p>
+
+    <model-viewer
+      src="donut.glb"
+      alt="A detailed 3D donut with white glaze frosting and colourful sprinkles on a porcelain plate"
+      auto-rotate
+      auto-rotate-delay="800"
+      rotation-per-second="18deg"
+      camera-controls
+      shadow-intensity="1.0"
+      shadow-softness="0.85"
+      exposure="1.15"
+      environment-image="neutral"
+      tone-mapping="commerce"
+    ></model-viewer>
+
+  </div>
 
 </body>
 </html>
