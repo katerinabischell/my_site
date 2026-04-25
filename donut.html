@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donut 🍩</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(160deg, #fdf3e3 0%, #fce8c0 50%, #f9d89a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Georgia', serif;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #6b3a1f;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.03em;
+    }
+
+    p.sub {
+      font-size: 0.95rem;
+      color: #a0622a;
+      margin-bottom: 1.8rem;
+    }
+
+    model-viewer {
+      width: min(700px, 95vw);
+      height: min(700px, 95vw);
+      background: transparent;
+      --poster-color: transparent;
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(100, 50, 0, 0.18);
+    }
+
+    .hint {
+      margin-top: 1.2rem;
+      font-size: 0.80rem;
+      color: #b07840;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Fresh Donut 🍩</h1>
+  <p class="sub">Drag to rotate &nbsp;·&nbsp; Scroll to zoom</p>
+
+  <model-viewer
+    src="donut.glb"
+    alt="A detailed 3D donut with white glaze frosting and colourful sprinkles"
+    auto-rotate
+    auto-rotate-delay="1000"
+    rotation-per-second="20deg"
+    camera-controls
+    shadow-intensity="1.2"
+    shadow-softness="0.8"
+    exposure="1.1"
+    environment-image="neutral"
+    tone-mapping="commerce"
+  ></model-viewer>
+
+  <p class="hint">Made in Blender 5.1.1 &nbsp;·&nbsp; Exported as .glb &nbsp;·&nbsp;
+    <a href="https://katerinabischell.github.io/my_site" style="color:#a0622a;">katerinabischell.github.io/my_site</a>
+  </p>
+
+</body>
+</html>
